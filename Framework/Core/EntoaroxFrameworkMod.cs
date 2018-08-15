@@ -80,7 +80,7 @@ namespace Entoarox.Framework.Core
             SaveEvents.AfterSave += this.SaveEvents_AfterSave;
             //TODO Update update checker
             //this.Helper.RequestUpdateCheck("https://raw.githubusercontent.com/Entoarox/StardewMods/master/Framework/About/update.json");
-            this.Helper.RequestUpdateCheck("https://github.com/Slamerz/StardewMods/tree/master/Framework/About/update.json");
+            this.Helper.RequestUpdateCheck("https://raw.githubusercontent.com/Slamerz/StardewMods/master/Framework/About/update.json");
         }
         public override object GetApi()
         {
@@ -134,42 +134,42 @@ namespace Entoarox.Framework.Core
             }
             switch (command)
             {
+                /* TODO Fix bushreset
                 case "world_bushreset":
-                    foreach (GameLocation l in Game1.locations)
+                    foreach (GameLocation loc in Game1.locations)
                     {
-                        foreach(Bush b in l.largeTerrainFeatures)
+                        loc.largeTerrainFeatures = loc.largeTerrainFeatures.FindAll(a => !(a is Bush));
+                        if ((loc.isOutdoors || loc.name.Equals("BathHouse_Entry") || loc.treatAsOutdoors) && loc.map.GetLayer("Paths") != null)
                         {
-                            if ((!l.IsOutdoors && !l.Name.Equals("BathHouse_Entry") && !l.treatAsOutdoors.Value) ||
-                                l.map.GetLayer("Paths") == null) continue;
-                            for (int x = 0; x < l.map.Layers[0].LayerWidth; ++x)
+                            for (int x = 0; x < loc.map.Layers[0].LayerWidth; ++x)
                             {
-                                for (int y = 0; y < l.map.Layers[0].LayerHeight; ++y)
+                                for (int y = 0; y < loc.map.Layers[0].LayerHeight; ++y)
                                 {
-                                    Tile tile = l.map.GetLayer("Paths").Tiles[x, y];
-                                    if (tile == null) continue;
-                                    Vector2 vector2 = new Vector2(x, y);
-                                    switch (tile.TileIndex)
+                                    Tile tile = loc.map.GetLayer("Paths").Tiles[x, y];
+                                    if (tile != null)
                                     {
-                                        case 24:
-                                            if (!l.terrainFeatures.ContainsKey(vector2))
-                                                l.largeTerrainFeatures.Add(new Bush(vector2, 2, l));
-                                            break;
-                                        case 25:
-                                            if (!l.terrainFeatures.ContainsKey(vector2))
-                                                l.largeTerrainFeatures.Add(new Bush(vector2, 1, l));
-                                            break;
-                                        case 26:
-                                            if (!l.terrainFeatures.ContainsKey(vector2))
-                                                l.largeTerrainFeatures.Add(new Bush(vector2, 0, l));
-                                            break;
+                                        Vector2 vector2 = new Vector2(x, y);
+                                        switch (tile.TileIndex)
+                                        {
+                                            case 24:
+                                                if (!loc.terrainFeatures.ContainsKey(vector2))
+                                                    loc.largeTerrainFeatures.Add(new Bush(vector2, 2, loc));
+                                                break;
+                                            case 25:
+                                                if (!loc.terrainFeatures.ContainsKey(vector2))
+                                                    loc.largeTerrainFeatures.Add(new Bush(vector2, 1, loc));
+                                                break;
+                                            case 26:
+                                                if (!loc.terrainFeatures.ContainsKey(vector2))
+                                                    loc.largeTerrainFeatures.Add(new Bush(vector2, 0, loc));
+                                                break;
+                                        }
                                     }
                                 }
                             }
                         }
-
-                        
                     }
-                    break;
+                    break;*/
                 case "farm_settype":
                     if (args.Length == 0)
                         this.Monitor.Log("Please provide the type you wish to change your farm to.", LogLevel.Error);
@@ -269,13 +269,7 @@ namespace Entoarox.Framework.Core
             var data = new Dictionary<string, InstanceState>();
             foreach(GameLocation loc in Game1.locations)
             {
-                //TODO Testing.    look into where Chests & Fridge store thier item locations
-                /*[22:58:19 ERROR Entoarox Framework] This mod failed in the SaveEvents.AfterSave event. Technical details:
-System.InvalidCastException: Unable to cast object of type 'StardewValley.Object' to type 'StardewValley.Objects.Chest'.
-   at Entoarox.Framework.Core.EntoaroxFrameworkMod.SaveEvents_AfterSave(Object s, EventArgs e)
-   at StardewModdingAPI.Framework.Events.ManagedEvent.Raise() in C:\source\_Stardew\SMAPI\src\SMAPI\Framework\Events\ManagedEvent.cs:line 126
-   */
-                foreach (Chest chest in loc.Objects.Values)
+                foreach (Chest chest in loc.Objects.Values.OfType<Chest>())
                 {
                     Serialize(data, chest.items);
                 }
@@ -284,14 +278,12 @@ System.InvalidCastException: Unable to cast object of type 'StardewValley.Object
             var house = (Game1.getLocationFromName("FarmHouse") as StardewValley.Locations.FarmHouse);
 
             if (house.fridge.Value != null)
-                foreach (Chest chest in house.fridge)
-                {
-                    Serialize(data, chest.items);
-                }
+                Serialize(data, house.fridge.Value.items);
             string path = Path.Combine(Constants.CurrentSavePath, "Entoarox.Framework", "CustomItems.json");
             this.Helper.WriteJsonFile(path, data);
             ItemEvents.FireAfterSerialize();
         }
+
         private void SaveEvents_AfterSave(object s, EventArgs e)
         {
             this.Monitor.Log("Unpacking custom objects...", LogLevel.Trace);
@@ -300,26 +292,14 @@ System.InvalidCastException: Unable to cast object of type 'StardewValley.Object
             var data = this.Helper.ReadJsonFile<Dictionary<string, InstanceState>>(path) ?? new Dictionary<string, InstanceState>();
             foreach (GameLocation loc in Game1.locations)
             {
-                foreach (Chest chest in loc.Objects.Values)
+                foreach (Chest chest in loc.Objects.Values.OfType<Chest>())
                 {
-                    foreach (Item item in Deserialize(data, chest.items))
-                    {
-                        chest.addItem(item);
-                    }
+                    chest.items.Set(Deserialize(data, chest.items));
                 }
             }
             Game1.player.Items = Deserialize(data, Game1.player.Items);
             var house = (Game1.getLocationFromName("FarmHouse") as StardewValley.Locations.FarmHouse);
-            if (house.fridge.Value != null)
-            {
-                foreach (Chest chest in house.fridge)
-                {
-                    foreach (Item item in Deserialize(data, chest.items))
-                    {
-                        chest.addItem(item);
-                    }
-                }
-            }
+            house.fridge.Value?.items.Set(this.Deserialize(data, house.fridge.Value.items));
             ItemEvents.FireAfterDeserialize();
         }
         #endregion
