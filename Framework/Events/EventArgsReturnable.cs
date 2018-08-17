@@ -1,4 +1,4 @@
-namespace Entoarox.Framework.Events
+﻿namespace Entoarox.Framework.Events
 {
     public class EventArgsReturnable<TReturn> : EventArgsArguments
     {
@@ -11,7 +11,10 @@ namespace Entoarox.Framework.Events
                 this.ReturnSet = true;
                 this._Value = value;
             }
-            get => this._Value;
+            get
+            {
+                return this._Value;
+            }
         }
         public EventArgsReturnable(object[] arguments = null) : base(arguments)
         {

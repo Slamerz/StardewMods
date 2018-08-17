@@ -1,6 +1,6 @@
-namespace Entoarox.Framework.UI
+﻿namespace Entoarox.Framework.UI
 {
-    public abstract class BaseKeyboardFormComponent : BaseFormComponent, IKeyboardComponent
+    abstract public class BaseKeyboardFormComponent : BaseFormComponent, IKeyboardComponent
     {
         public bool Selected {get; set; }
         public virtual void TextReceived(char chr)

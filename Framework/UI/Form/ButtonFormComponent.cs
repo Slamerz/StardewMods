@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,14 +9,17 @@ namespace Entoarox.Framework.UI
 {
     public class ButtonFormComponent : BaseFormComponent
     {
-        protected static readonly Rectangle ButtonNormal = new Rectangle(256, 256, 10, 10);
-        protected static readonly Rectangle ButtonHover = new Rectangle(267, 256, 10, 10);
+        protected readonly static Rectangle ButtonNormal = new Rectangle(256, 256, 10, 10);
+        protected readonly static Rectangle ButtonHover = new Rectangle(267, 256, 10, 10);
         public event ClickHandler Handler;
         protected string _Label;
         protected int _Width;
         public string Label
         {
-            get => this._Label;
+            get
+            {
+                return this._Label;
+            }
             set
             {
                 this._Label = value;

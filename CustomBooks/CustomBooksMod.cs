@@ -49,8 +49,13 @@ namespace Entoarox.CustomBooks
                     Game1.player.addItemToInventory(new Book(id));
                     break;
                 case "clear":
-                    Game1.player.items.RemoveAll(a => a is Book);
+                    foreach (Item item in Game1.player.Items.Where(a => a is Book))
+                    {
+                        Game1.player.Items.Remove(item);
+                    }
                     break;
+                default:
+                    return;
             }
         }
     }

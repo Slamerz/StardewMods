@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
@@ -31,9 +31,9 @@ namespace Entoarox.Framework.UI
         }
         protected GenericCollectionComponent(List<IMenuComponent> components = null)
         {
-            if (components == null) return;
-            foreach (IMenuComponent c in components)
-                this.AddComponent(c);
+            if (components != null)
+                foreach (IMenuComponent c in components)
+                    AddComponent(c);
         }
         public GenericCollectionComponent(Point size, List<IMenuComponent> components = null) : this(components)
         {
@@ -81,14 +81,14 @@ namespace Entoarox.Framework.UI
             this.Parent.GiveFocus(this);
             ResetFocus();
             this.FocusElement = component;
-            if (this.FocusElement is IKeyboardComponent keyboardComponent)
-                Game1.keyboardDispatcher.Subscriber = new KeyboardSubscriberProxy(keyboardComponent);
+            if (this.FocusElement is IKeyboardComponent)
+                Game1.keyboardDispatcher.Subscriber = new KeyboardSubscriberProxy((IKeyboardComponent)this.FocusElement);
             component.FocusGained();
         }
         public void AddComponent(IMenuComponent component)
         {
-            if (component is IInteractiveMenuComponent menuComponent)
-                this._InteractiveComponents.Add(menuComponent);
+            if (component is IInteractiveMenuComponent)
+                this._InteractiveComponents.Add(component as IInteractiveMenuComponent);
             else
                 this._StaticComponents.Add(component);
             component.Attach(this);
@@ -121,10 +121,14 @@ namespace Entoarox.Framework.UI
         {
             return true;
         }
-        public Rectangle EventRegion => this.Area;
-
-        public Rectangle ZoomEventRegion => new Rectangle(this.Area.X/Game1.pixelZoom, this.Area.Y/Game1.pixelZoom, this.Area.Width/Game1.pixelZoom, this.Area.Height/Game1.pixelZoom);
-
+        public Rectangle EventRegion
+        {
+            get { return this.Area; }
+        }
+        public Rectangle ZoomEventRegion
+        {
+            get { return new Rectangle(this.Area.X/Game1.pixelZoom, this.Area.Y/Game1.pixelZoom, this.Area.Width/Game1.pixelZoom, this.Area.Height/Game1.pixelZoom); }
+        }
         // IInteractiveMenuComponent
         public override void FocusLost()
         {
@@ -176,11 +180,13 @@ namespace Entoarox.Framework.UI
             Point o2 = new Point(this.Area.X + o.X, this.Area.Y + o.Y);
             foreach (IInteractiveMenuComponent el in this.EventOrder)
             {
-                if (!el.InBounds(p, o2)) continue;
-                this.GiveFocus(el);
-                this.FocusElement = el;
-                el.RightClick(p, o2);
-                return;
+                if (el.InBounds(p, o2))
+                {
+                    GiveFocus(el);
+                    this.FocusElement = el;
+                    el.RightClick(p, o2);
+                    return;
+                }
             }
             ResetFocus();
         }
@@ -196,14 +202,16 @@ namespace Entoarox.Framework.UI
             }
             foreach (IInteractiveMenuComponent el in this.EventOrder)
             {
-                if (!el.InBounds(p, o2)) continue;
-                if (this.HoverElement == null)
+                if (el.InBounds(p, o2))
                 {
-                    this.HoverElement = el;
-                    el.HoverIn(p, o2);
+                    if (this.HoverElement == null)
+                    {
+                        this.HoverElement = el;
+                        el.HoverIn(p, o2);
+                    }
+                    el.HoverOver(p, o2);
+                    break;
                 }
-                el.HoverOver(p, o2);
-                break;
             }
         }
         public override bool Scroll(int d, Point p, Point o)

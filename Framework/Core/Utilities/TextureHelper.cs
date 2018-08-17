@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
@@ -35,15 +35,17 @@ namespace Entoarox.Framework.Core.Utilities
         private static Dictionary<string, Texture2D> Cache = new Dictionary<string, Texture2D>();
         public static Texture2D GetTexture(string file, IMonitor monitor=null)
         {
-            if (Cache.ContainsKey(file)) return Cache[file];
-            Texture2D texture = Texture2D.FromStream(Game1.graphics.GraphicsDevice, new FileStream(file, FileMode.Open));
-            if ((bool)DrawLoop.GetValue(null)==true)
+            if (!Cache.ContainsKey(file))
             {
-                (monitor ?? EntoaroxFrameworkMod.Logger).Log("It is not recommended to load a texture during the draw loop!" + Environment.NewLine + file,LogLevel.Warn);
-                Cache.Add(file, PremultiplyCPU(texture));
+                Texture2D texture = Texture2D.FromStream(Game1.graphics.GraphicsDevice, new FileStream(file, FileMode.Open));
+                if ((bool)DrawLoop.GetValue(null)==true)
+                {
+                    (monitor ?? EntoaroxFrameworkMod.Logger).Log("It is not recommended to load a texture during the draw loop!" + Environment.NewLine + file,LogLevel.Warn);
+                    Cache.Add(file, PremultiplyCPU(texture));
+                }
+                else
+                    Cache.Add(file, PremultiplyGPU(texture));
             }
-            else
-                Cache.Add(file, PremultiplyGPU(texture));
             return Cache[file];
         }
         public static Texture2D Premultiply(Texture2D texture, IMonitor monitor=null)

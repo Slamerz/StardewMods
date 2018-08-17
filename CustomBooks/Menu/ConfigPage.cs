@@ -38,7 +38,12 @@ namespace Entoarox.CustomBooks
             {
                 if (this.Deleting)
                 {
-                    Game1.player.items.RemoveAll(a => (a as Book)?.Id.Equals(this.Menu.Id) == true);
+                    foreach (Item item in Game1.player.Items)
+                    {
+                        if (item is Book book && book.Id.Equals(this.Menu.Id))
+
+                            Game1.player.Items.Remove(item);
+                    }
                     CustomBooksMod.Shelf.Books.Remove(this.Menu.Id);
                     Game1.playSound("trashcan");
                     this.Menu.exitThisMenu(false);

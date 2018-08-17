@@ -86,7 +86,7 @@ namespace PlayGround
                                     break;
                                 default:
                                     // Locations that are normal or locked-door warps are handled here
-                                    var props = prop.Split(' ');
+                                    string[] props = prop.Split(' ');
                                     switch (props[0])
                                     {
                                         case "Warp":

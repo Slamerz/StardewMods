@@ -1,11 +1,11 @@
-using System;
+﻿using System;
 using System.Runtime.CompilerServices;
 using System.Reflection;
 using System.Reflection.Emit;
 
 namespace Entoarox.Framework.Core.Utilities
 {
-    internal unsafe class UnsafeHelper
+    unsafe internal class UnsafeHelper
     {
         private static IntPtr GetMethodAddress(MethodBase method)
         {
@@ -29,7 +29,7 @@ namespace Entoarox.Framework.Core.Utilities
             RuntimeHelpers.PrepareMethod(method.MethodHandle);
             int skip = 10;
 
-            ulong* location = (ulong*)(method.MethodHandle.Value.ToPointer());
+            UInt64* location = (UInt64*)(method.MethodHandle.Value.ToPointer());
             int index = (int)(((*location) >> 32) & 0xFF);
 
             if (IntPtr.Size == 8)

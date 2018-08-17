@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,8 +12,14 @@ namespace Entoarox.Framework.UI
         protected static Texture2D Box;
         public string Value
         {
-            get => this._Value;
-            set => this._Value = value;
+            get
+            {
+                return this._Value;
+            }
+            set
+            {
+                this._Value = value;
+            }
         }
         public event ValueChanged<string> Handler;
         public Func<TextboxFormComponent, FrameworkMenu, string, string> TabPressed;
@@ -114,7 +120,7 @@ namespace Entoarox.Framework.UI
                         return;
                     bool Next = false;
                     IInteractiveMenuComponent first=null;
-                    foreach(IInteractiveMenuComponent imc in ((IComponentCollection) this.Parent).InteractiveComponents)
+                    foreach(IInteractiveMenuComponent imc in (this.Parent as IComponentCollection).InteractiveComponents)
                     {
                         if (first == null && imc is TextboxFormComponent)
                             first = imc;

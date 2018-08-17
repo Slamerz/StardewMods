@@ -10,8 +10,15 @@ namespace Entoarox.Framework.Core
     internal class PlayerHelper : IPlayerHelper
     {
         private IPlayerModifierHelper _Modifiers;
-        public IPlayerModifierHelper Modifiers => this._Modifiers ?? (this._Modifiers = new PlayerModifierHelper());
-
+        public IPlayerModifierHelper Modifiers
+        {
+            get
+            {
+                if (this._Modifiers == null)
+                    this._Modifiers = new PlayerModifierHelper();
+                return this._Modifiers;
+            }
+        }
         public void MoveTo(int x, int y)
         {
             Game1.warpFarmer(Game1.player.currentLocation.Name, Convert.ToInt32(x), Convert.ToInt32(y), Game1.player.facingDirection, Game1.player.currentLocation.isStructure.Value);
@@ -30,14 +37,13 @@ namespace Entoarox.Framework.Core
         public bool HasPet(bool vanillaOnly)
         {
             List<NPC> matches = null;
-            foreach(NPC n in Utility.getAllCharacters())
+            foreach (NPC n in Utility.getAllCharacters())
             {
-                if(n is Pet)
+                if (n is Pet)
                 {
                     matches.Add(n);
                 }
             }
-            
             if (vanillaOnly)
                 return matches.Any(a => (Game1.player.catPerson ? a is Cat : a is Dog) && a.Manners == 0 && a.Age == 0);
             else
@@ -46,9 +52,9 @@ namespace Entoarox.Framework.Core
         public Pet GetPet()
         {
             List<Pet> matches = null;
-            foreach(NPC n in Utility.getAllCharacters())
+            foreach (NPC n in Utility.getAllCharacters())
             {
-                if(n is Pet)
+                if (n is Pet)
                 {
                     matches.Add(n);
                 }
@@ -58,12 +64,13 @@ namespace Entoarox.Framework.Core
                 pet = matches.First();
             return pet;
         }
-        public Pet[] GetAllPets()
+        public List<Pet> GetAllPets()
         {
-            Pet[] pets = null;
+            List<Pet> pets = null;
             foreach (NPC n in Utility.getAllCharacters())
             {
-                pets.Add(n);
+                if (n is Pet p)
+                    pets.Add(p);
             }
             return pets;
         }

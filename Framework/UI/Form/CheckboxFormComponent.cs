@@ -1,4 +1,4 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using StardewValley;
@@ -7,13 +7,19 @@ namespace Entoarox.Framework.UI
 {
     public class CheckboxFormComponent : BaseFormComponent
     {
-        protected static readonly Rectangle sourceRectUnchecked = new Rectangle(227, 425, 9, 9);
-        protected static readonly Rectangle sourceRectChecked = new Rectangle(236, 425, 9, 9);
+        protected readonly static Rectangle sourceRectUnchecked = new Rectangle(227, 425, 9, 9);
+        protected readonly static Rectangle sourceRectChecked = new Rectangle(236, 425, 9, 9);
         public event ValueChanged<bool> Handler;
         public bool Value
         {
-            get => this._Value;
-            set => this._Value = value;
+            get
+            {
+                return this._Value;
+            }
+            set
+            {
+                this._Value = value;
+            }
         }
         protected bool _Value;
         protected string Label;

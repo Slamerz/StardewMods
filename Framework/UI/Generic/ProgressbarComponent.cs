@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,12 +10,18 @@ namespace Entoarox.Framework.UI
 {
     public class ProgressbarComponent : BaseMenuComponent
     {
-        protected static readonly Rectangle Background = new Rectangle(403, 383, 6, 6);
-        protected static readonly Rectangle Filler = new Rectangle(306,320,16,16);
+        protected readonly static Rectangle Background = new Rectangle(403, 383, 6, 6);
+        protected readonly static Rectangle Filler = new Rectangle(306,320,16,16);
         public int Value
         {
-            get => this._Value;
-            set => this._Value = Math.Max(0, Math.Min(this.MaxValue, value));
+            get
+            {
+                return this._Value;
+            }
+            set
+            {
+                this._Value = Math.Max(0, Math.Min(this.MaxValue, value));
+            }
         }
         protected int _Value;
         protected int MaxValue;

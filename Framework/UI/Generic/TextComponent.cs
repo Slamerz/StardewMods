@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,7 +14,10 @@ namespace Entoarox.Framework.UI
         protected float _Scale;
         public float Scale
         {
-            get => this._Scale;
+            get
+            {
+                return this._Scale;
+            }
             set
             {
 
@@ -26,7 +29,10 @@ namespace Entoarox.Framework.UI
         }
         public string Label
         {
-            get => this._Label;
+            get
+            {
+                return this._Label;
+            }
             set
             {
                 this._Label = value;
@@ -43,7 +49,10 @@ namespace Entoarox.Framework.UI
                 this.Color = Game1.textColor;
             else
                 this.Color = (Color)color;
-            this.Font = font ?? Game1.smallFont;
+            if (font == null)
+                this.Font = Game1.smallFont;
+            else
+                this.Font = font;
             this.Shadow = shadow;
             this._Scale = scale;
             this._Label = label;

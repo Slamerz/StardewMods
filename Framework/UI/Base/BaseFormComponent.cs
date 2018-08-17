@@ -1,6 +1,6 @@
-namespace Entoarox.Framework.UI
+﻿namespace Entoarox.Framework.UI
 {
-    public abstract class BaseFormComponent : BaseInteractiveMenuComponent
+    abstract public class BaseFormComponent : BaseInteractiveMenuComponent
     {
         public virtual bool Disabled { get; set;} = false;
     }

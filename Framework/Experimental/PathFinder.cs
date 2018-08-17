@@ -55,15 +55,16 @@ namespace Entoarox.Framework.Experimental
                         finish = node;
                     }
                 }
-
-                if (finished) return;
-                Task[] tasks ={
-                    Task.Run(() => {LookNext(new Node(node.X - 1, node.Y, node));}),
-                    Task.Run(() => {LookNext(new Node(node.X + 1, node.Y, node));}),
-                    Task.Run(() => {LookNext(new Node(node.X, node.Y - 1, node));}),
-                    Task.Run(() => {LookNext(new Node(node.X, node.Y + 1, node));})
-                };
-                Task.WaitAll(tasks);
+                if(!finished)
+                {
+                    Task[] tasks ={
+                        Task.Run(() => {LookNext(new Node(node.X - 1, node.Y, node));}),
+                        Task.Run(() => {LookNext(new Node(node.X + 1, node.Y, node));}),
+                        Task.Run(() => {LookNext(new Node(node.X, node.Y - 1, node));}),
+                        Task.Run(() => {LookNext(new Node(node.X, node.Y + 1, node));})
+                    };
+                    Task.WaitAll(tasks);
+                }
             }
             LookNext(new Node(start.X, start.Y));
             List<Node> points = new List<Node>();

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -15,7 +15,10 @@ namespace Entoarox.Framework.UI
         protected bool Hovered = false;
         public float Scale
         {
-            get => this._Scale;
+            get
+            {
+                return this._Scale;
+            }
             set
             {
 
@@ -27,7 +30,10 @@ namespace Entoarox.Framework.UI
         }
         public string Label
         {
-            get => this._Label;
+            get
+            {
+                return this._Label;
+            }
             set
             {
                 this._Label = value;

@@ -17,11 +17,12 @@ namespace PlayGround
     {
         private Vector2 SteamPosition;
         private Texture2D SteamAnimation;
-        public CustomBathhouse(Map map, string name, Texture2D steam=null) : base(map, name)
+        public CustomBathhouse(Map map, string name, Texture2D steam=null) : base(map.ToString(), name)
         {
             this.SteamAnimation = steam;
         }
-        public override void resetForPlayerEntry()
+
+        public new void resetForPlayerEntry()
         {
             base.resetForPlayerEntry();
             Game1.changeMusicTrack("pool_ambient");
