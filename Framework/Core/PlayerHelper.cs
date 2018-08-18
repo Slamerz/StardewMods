@@ -36,18 +36,17 @@ namespace Entoarox.Framework.Core
         }
         public bool HasPet(bool vanillaOnly)
         {
-            List<NPC> matches = null;
-            foreach (NPC n in Utility.getAllCharacters())
+            List<Pet> pets = new List<Pet>();
+            List<NPC> npcs = new List<NPC>();
+            foreach (NPC npc in Utility.getAllCharacters())
             {
-                if (n is Pet)
-                {
-                    matches.Add(n);
-                }
+                npcs.Add(npc);
             }
+            pets = npcs.Where(a => a is Pet).Cast<Pet>().ToList();
             if (vanillaOnly)
-                return matches.Any(a => (Game1.player.catPerson ? a is Cat : a is Dog) && a.Manners == 0 && a.Age == 0);
+                return pets.Any(a => (Game1.player.catPerson ? a is Cat : a is Dog) && a.Manners == 0 && a.Age == 0);
             else
-                return matches.Any();
+                return pets.Any();
         }
         public Pet GetPet()
         {
@@ -66,12 +65,13 @@ namespace Entoarox.Framework.Core
         }
         public List<Pet> GetAllPets()
         {
-            List<Pet> pets = null;
-            foreach (NPC n in Utility.getAllCharacters())
+            List<Pet> pets = new List<Pet>();
+            List<NPC> npcs = new List<NPC>();
+            foreach (NPC npc in Utility.getAllCharacters())
             {
-                if (n is Pet p)
-                    pets.Add(p);
+                npcs.Add(npc);
             }
+            pets = npcs.Where(a => a is Pet).Cast<Pet>().ToList();
             return pets;
         }
     }

@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Harmony;
 
 using StardewValley.Locations;
+using StardewValley.Network;
 using StardewValley.Objects;
 
 namespace Entoarox.FurnitureAnywhere
@@ -15,7 +16,7 @@ namespace Entoarox.FurnitureAnywhere
     {
         internal static void Prefix(GameLocation __instance, Rectangle position)
         {
-            SerializableDictionary<Vector2, Object> objects = __instance.objects;
+            OverlaidDictionary<Vector2, Object> objects = __instance.objects;
             Vector2 key = new Vector2((position.Left / Game1.tileSize), (position.Top / Game1.tileSize));
 
             if (__instance is DecoratableLocation || objects.ContainsKey(key))
@@ -36,7 +37,7 @@ namespace Entoarox.FurnitureAnywhere
 
         internal static void Postfix(GameLocation __instance, Rectangle position)
         {
-            SerializableDictionary<Vector2, Object> objects = __instance.objects;
+            OverlaidDictionary<Vector2, Object> objects = __instance.objects;
             Vector2 key = new Vector2((position.Left / Game1.tileSize), (position.Top / Game1.tileSize));
 
             if (objects.ContainsKey(key) && objects[key] is Chest chest && chest.name.Equals("collider"))

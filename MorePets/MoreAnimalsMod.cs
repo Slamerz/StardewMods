@@ -1,14 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Pipes;
 using System.Linq;
 using Entoarox.Framework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Netcode;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Buildings;
 using StardewValley.Characters;
 using xTile.ObjectModel;
 using xTile.Tiles;
@@ -22,6 +25,7 @@ namespace Entoarox.MorePetsAndAnimals
         internal static Random random;
         internal static ModConfig Config;
         internal static IModHelper SHelper;
+        private static readonly ListPool<Pet> Pool = new ListPool<Pet>();
         internal static Dictionary<string, List<int>> Indexes = new Dictionary<string, List<int>>()
         {
             ["BabyBlue Chicken"] = new List<int>(),
@@ -124,13 +128,16 @@ namespace Entoarox.MorePetsAndAnimals
         }
         public List<Pet> GetAllPets()
         {
-            List<Pet> pets = null;
-            foreach (NPC n in Utility.getAllCharacters())
+            List<Pet> pets = new List<Pet>();
+            List<NPC> npcs = new List<NPC>();
+            foreach (NPC npc in Utility.getAllCharacters())
             {
-                if(n.)
+                npcs.Add(npc);
             }
+            pets = npcs.Where(a => a is Pet).Cast<Pet>().ToList();
             return pets;
         }
+
         internal void GameEvents_UpdateTick(object s, EventArgs e)
         {
             if (!Context.IsWorldReady)
