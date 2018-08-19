@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -14,13 +15,14 @@ namespace Entoarox.MorePetsAndAnimals
         private int Skin;
         private StardewValley.Farmer Who = null;
         private AnimatedSprite Sprite;
+        private ContentManager ContentManager = new ContentManager();CreateContentManager(this.Content.ServiceProvider, this.Content.RootDirectory);
         internal AdoptQuestion(bool cat, int skin)
         {
             this.Cat = cat;
             this.Skin = skin;
 
             var textures = this.Cat ? MoreAnimalsMod.Indexes["cat"] : MoreAnimalsMod.Indexes["dog"];
-            this.Sprite = new AnimatedSprite(MoreAnimalsMod.SHelper.Content.Load<Texture2D>($"skins\\{(cat ? "cat" : "dog")}_{skin}").Name, 28, 32, 32);
+            this.Sprite = new AnimatedSprite(this.ContentManager, MoreAnimalsMod.SHelper.Content.Load<Texture2D>($"skins\\{(cat ? "cat" : "dog")}_{skin}").Name, 28, 32, 32);
             this.Sprite.loop = true;
         }
         internal static void Show()
