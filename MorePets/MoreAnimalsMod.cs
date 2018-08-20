@@ -19,6 +19,7 @@ namespace Entoarox.MorePetsAndAnimals
 {
     public class MoreAnimalsMod : Mod
     {
+
         private static bool replaceBus = true;
         private bool _TriggerAction = false;
         internal static Random random;
