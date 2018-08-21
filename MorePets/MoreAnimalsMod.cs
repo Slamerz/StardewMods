@@ -26,6 +26,7 @@ namespace Entoarox.MorePetsAndAnimals
         internal static ModConfig Config;
         internal static IModHelper SHelper;
         private static readonly ListPool<Pet> Pool = new ListPool<Pet>();
+        internal static LocalizedContentManager Content = new LocalizedContentManager(Game1.content.ServiceProvider, "Mods\\MoreAnimals\\skins");
         internal static Dictionary<string, List<int>> Indexes = new Dictionary<string, List<int>>()
         {
             ["BabyBlue Chicken"] = new List<int>(),
@@ -162,7 +163,7 @@ namespace Entoarox.MorePetsAndAnimals
                     try
                     {
                         string type = npc is Dog ? "dog" : "cat";
-                        npc.Sprite = new AnimatedSprite(this.Helper.Content.Load<Texture2D>($"skins/{type}_{npc.Manners}").Name, 0, 32, 32);
+                        npc.Sprite = new AnimatedSprite(Content, $"{type}_{npc.Manners}", 0, 32, 32);
                     }
                     catch
                     {
@@ -186,9 +187,9 @@ namespace Entoarox.MorePetsAndAnimals
                 {
                     try
                     {
-                        Texture2D texture = this.Helper.Content.Load<Texture2D>("skins/" + str + "_" + (animal.meatIndex.Value - 999).ToString());
+                        Texture2D texture = this.Helper.Content.Load<Texture2D>(str + "_" + (animal.meatIndex.Value - 999).ToString());
                         if (animal.Sprite.Texture != texture)
-                            animal.Sprite = new AnimatedSprite(texture.Name, 0, animal.frontBackSourceRect.Width, animal.frontBackSourceRect.Height);
+                            animal.Sprite = new AnimatedSprite(Content, texture.Name, 0, animal.frontBackSourceRect.Width, animal.frontBackSourceRect.Height);
                     }
                     catch
                     {
@@ -196,9 +197,9 @@ namespace Entoarox.MorePetsAndAnimals
                         if (str.Equals("BabyDuck"))
                             try
                             {
-                                Texture2D texture = this.Helper.Content.Load<Texture2D>("skins/BabyDuck");
+                                Texture2D texture = Content.Load<Texture2D>("BabyDuck");
                                 if (animal.Sprite.Texture != texture)
-                                    animal.Sprite = new AnimatedSprite(texture.Name, 0, animal.frontBackSourceRect.Width, animal.frontBackSourceRect.Height);
+                                    animal.Sprite = new AnimatedSprite(Content, texture.Name, 0, animal.frontBackSourceRect.Width, animal.frontBackSourceRect.Height);
                             }
                             catch
                             {
@@ -219,9 +220,9 @@ namespace Entoarox.MorePetsAndAnimals
                 {
                     try
                     {
-                        Texture2D texture = this.Helper.Content.Load<Texture2D>("skins/BabyDuck");
+                        Texture2D texture = Content.Load<Texture2D>("BabyDuck");
                         if (animal.Sprite.Texture != texture)
-                            animal.Sprite = new AnimatedSprite(texture.Name, 0, animal.frontBackSourceRect.Width, animal.frontBackSourceRect.Height);
+                            animal.Sprite = new AnimatedSprite(Content, texture.Name, 0, animal.frontBackSourceRect.Width, animal.frontBackSourceRect.Height);
                     }
                     catch
                     {
@@ -232,6 +233,12 @@ namespace Entoarox.MorePetsAndAnimals
                     }
                 }
             }
+        }
+
+        internal void CommandFired_ListPest(string name, string[] args)
+        {
+
+
         }
         internal void CommandFired_KillPets(string name, string[] args)
         {

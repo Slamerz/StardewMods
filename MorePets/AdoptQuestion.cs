@@ -15,7 +15,7 @@ namespace Entoarox.MorePetsAndAnimals
         private int Skin;
         private StardewValley.Farmer Who = null;
         private AnimatedSprite Sprite;
-        private LocalizedContentManager Content = new LocalizedContentManager(Game1.content.ServiceProvider, "Mods\\MoreAnimals");
+        
         internal AdoptQuestion(bool cat, int skin)
         {
             this.Cat = cat;
@@ -23,7 +23,7 @@ namespace Entoarox.MorePetsAndAnimals
 
             var textures = this.Cat ? MoreAnimalsMod.Indexes["cat"] : MoreAnimalsMod.Indexes["dog"];
             
-            this.Sprite = new AnimatedSprite(this.Content, $"skins\\{(cat ? "cat" : "dog")}_{skin}", 28, 32, 32);
+            this.Sprite = new AnimatedSprite(MoreAnimalsMod.Content, $"{(cat ? "cat" : "dog")}_{skin}", 28, 32, 32);
             this.Sprite.loop = true;
         }
         internal static void Show()
@@ -78,12 +78,12 @@ namespace Entoarox.MorePetsAndAnimals
             if (this.Cat)
             {
                 pet = new Cat((int)Game1.player.position.X, (int)Game1.player.position.Y);
-                pet.Sprite = new AnimatedSprite(this.Content, $"skins\\cat_{this.Skin}", 0, 32, 32);
+                pet.Sprite = new AnimatedSprite(MoreAnimalsMod.Content, $"cat_{this.Skin}", 0, 32, 32);
             }
             else
             {
                 pet = new Dog(Game1.player.getTileLocationPoint().X, Game1.player.getTileLocationPoint().Y);
-                pet.Sprite = new AnimatedSprite(this.Content, $"skins\\dog_{this.Skin}", 0, 32, 32);
+                pet.Sprite = new AnimatedSprite(MoreAnimalsMod.Content, $"dog_{this.Skin}", 0, 32, 32);
             }
             pet.Name = petName;
             pet.Manners = this.Skin;
