@@ -77,7 +77,8 @@ namespace Entoarox.Framework.Core
             SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
             SaveEvents.AfterLoad += this.SaveEvents_AfterSave;
             SaveEvents.AfterSave += this.SaveEvents_AfterSave;
-            this.Helper.RequestUpdateCheck("https://raw.githubusercontent.com/Entoarox/StardewMods/master/Framework/About/update.json");
+            //this.Helper.RequestUpdateCheck("https://raw.githubusercontent.com/Entoarox/StardewMods/master/Framework/About/update.json");
+            this.Helper.RequestUpdateCheck("https://raw.githubusercontent.com/Slamerz/StardewMods/master/Framework/About/update.json");
         }
         public override object GetApi()
         {
