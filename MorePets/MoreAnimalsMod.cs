@@ -99,7 +99,7 @@ namespace Entoarox.MorePetsAndAnimals
                 ControlEvents.MouseChanged += this.ControlEvents_MouseChanged;
             }
             // check version
-            this.Helper.RequestUpdateCheck("https://raw.githubusercontent.com/Entoarox/StardewMods/master/MorePets/update.json");
+            //this.Helper.RequestUpdateCheck("https://raw.githubusercontent.com/Entoarox/StardewMods/master/MorePets/update.json");
         }
 
         private void LoadPetSkins()
