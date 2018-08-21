@@ -234,12 +234,6 @@ namespace Entoarox.MorePetsAndAnimals
                 }
             }
         }
-
-        internal void CommandFired_ListPest(string name, string[] args)
-        {
-
-
-        }
         internal void CommandFired_KillPets(string name, string[] args)
         {
             GameLocation farm = Game1.getLocationFromName("Farm");

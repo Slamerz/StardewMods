@@ -79,7 +79,7 @@ namespace Entoarox.Framework.Core
             SaveEvents.AfterSave += this.SaveEvents_AfterSave;
             //TODO Fix update checker
             //this.Helper.RequestUpdateCheck("https://raw.githubusercontent.com/Entoarox/StardewMods/master/Framework/About/update.json");
-            //this.Helper.RequestUpdateCheck("https://raw.githubusercontent.com/Slamerz/StardewMods/master/Framework/About/update.json");
+            this.Helper.RequestUpdateCheck("https://raw.githubusercontent.com/Slamerz/StardewMods/master/Framework/About/update.json");
         }
         public override object GetApi()
         {
