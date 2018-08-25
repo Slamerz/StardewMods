@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-
+using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
 
 using StardewModdingAPI;
@@ -12,6 +12,8 @@ using Warp = StardewValley.Warp;
 using Entoarox.Framework;
 
 using Entoarox.AdvancedLocationLoader.Configs;
+using Entoarox.Framework.Extensions;
+using xTile;
 
 namespace Entoarox.AdvancedLocationLoader
 {
@@ -106,7 +108,10 @@ namespace Entoarox.AdvancedLocationLoader
                     return;
                 Warp _warp = new Warp(warp.TileX, warp.TileY, warp.TargetName, warp.TargetX, warp.TargetY, false);
                 GameLocation loc = Game1.getLocationFromName(warp.MapName);
-                loc.warps.RemoveAll((a) => a.X == _warp.X && a.Y == _warp.Y);
+                foreach (Warp warp1 in loc.warps.Where(a => a.X == _warp.X && a.Y == _warp.Y))
+                {
+                    loc.RemoveWarp(warp1.X, warp1.Y);
+                }
                 loc.warps.Add(_warp);
             }
             catch (Exception err)
@@ -174,37 +179,41 @@ namespace Entoarox.AdvancedLocationLoader
         {
             try
             {
-                GameLocation loc;
-                xTile.Map map = contentPack.LoadAsset<xTile.Map>(location.FileName);
+                GameLocation loc = new GameLocation();
+                Map map = contentPack.LoadAsset<Map>(location.MapName);
                 switch (location.Type)
                 {
                     case "Cellar":
-                        loc = new StardewValley.Locations.Cellar(map, location.MapName)
-                        {
-                            objects = new SerializableDictionary<Microsoft.Xna.Framework.Vector2, StardewValley.Object>()
-                        };
+                        //loc = new StardewValley.Locations.Cellar("Maps\\AdvancedLocations\\" + location.MapName, location.MapName);
+                        loc.Map = map;
+                        loc.objects.Clear();
+                        loc.objects.Add(new SerializableDictionary<Microsoft.Xna.Framework.Vector2, StardewValley.Object>());
                         break;
                     case "BathHousePool":
-                        loc = new StardewValley.Locations.BathHousePool(map, location.MapName);
+                        loc = new StardewValley.Locations.BathHousePool(contentPack.DirectoryPath, location.MapName);
                         break;
                     case "Decoratable":
-                        loc = new Locations.DecoratableLocation(map, location.MapName);
+                        loc.Map = map;
                         break;
                     case "Desert":
                         loc = new Locations.Desert(map, location.MapName);
                         break;
                     case "Greenhouse":
-                        loc = new Locations.Greenhouse(map, location.MapName);
+                        loc.IsGreenhouse = true;
+                        loc.Map = map;
                         break;
                     case "Sewer":
-                        loc = new Locations.Sewer(map, location.MapName);
+                        loc.Map = map;
                         break;
                     default:
-                        loc = new GameLocation(map, location.MapName);
+                        ModEntry.Logger.Log(contentPack.DirectoryPath + "\\" + location.FileName + "~~~~~~" + location.MapName);
+                        //loc = new GameLocation("Maps\\AdvancedLocations\\" + location.MapName, location.MapName);
+                        loc.map = map;
+
                         break;
                 }
-                loc.isOutdoors = location.Outdoor;
-                loc.isFarm = location.Farmable;
+                loc.IsOutdoors =location.Outdoor;
+                loc.IsFarm = location.Farmable;
                 Game1.locations.Add(loc);
             }
             catch (Exception err)
@@ -216,7 +225,7 @@ namespace Entoarox.AdvancedLocationLoader
         {
             try
             {
-                Game1.locations[Game1.locations.FindIndex(l => l.name == obj.MapName)] = (GameLocation)Activator.CreateInstance(Game1.getLocationFromName(obj.MapName).GetType(), contentPack.LoadAsset<xTile.Map>(obj.FileName), obj.MapName);
+                Game1.locations[Game1.locations.FindIndex(l => l.Name == obj.MapName)] = (GameLocation)Activator.CreateInstance(Game1.getLocationFromName(obj.MapName).GetType(), contentPack.LoadAsset<xTile.Map>(obj.FileName), obj.MapName);
             }
             catch (Exception err)
             {

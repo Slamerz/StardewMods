@@ -1,4 +1,4 @@
-﻿using System.Xml.Serialization;
+using System.Xml.Serialization;
 
 namespace Entoarox.AdvancedLocationLoader.Locations
 {
@@ -9,16 +9,16 @@ namespace Entoarox.AdvancedLocationLoader.Locations
         {
 
         }
-        public Greenhouse(xTile.Map map, string name) : base(map,name)
+        public Greenhouse(xTile.Map map, string name) : base(map.ToString(),name)
         {
 
         }
         public override void DayUpdate(int dayOfMonth)
         {
-            string realName = this.name;
-            this.name = "Greenhouse";
+            string realName = this.Name;
+            this.name.Set("Greenhouse");
             base.DayUpdate(dayOfMonth);
-            this.name = realName;
+            this.name.Set(realName);
         }
     }
 }

@@ -33,11 +33,10 @@ namespace Entoarox.AdvancedLocationLoader
             Logger = this.Monitor;
             SHelper = helper;
             Strings = helper.Translation;
-            this.Helper.RequestUpdateCheck("https://raw.githubusercontent.com/Entoarox/StardewMods/master/AdvancedLocationLoader/About/update.json");
 
             MoreEvents.ActionTriggered += Events.MoreEvents_ActionTriggered;
             SpecialisedEvents.UnvalidatedUpdateTick += this.InitAfterLoad;
-            LocationEvents.CurrentLocationChanged += Events.LocationEvents_CurrentLocationChanged;
+            PlayerEvents.Warped += Events.LocationEvents_CurrentLocationChanged;
 
             this.Helper.Content.RegisterSerializerType<Locations.Greenhouse>();
             this.Helper.Content.RegisterSerializerType<Locations.Sewer>();

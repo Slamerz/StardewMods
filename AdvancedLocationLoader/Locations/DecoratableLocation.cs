@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Xml.Serialization;
 
 using Microsoft.Xna.Framework;
@@ -15,10 +15,10 @@ namespace Entoarox.AdvancedLocationLoader.Locations
         {
             public FakeWallpaper(Wallpaper item)
             {
-                this.isFloor = item.isFloor;
-                this.parentSheetIndex = item.parentSheetIndex;
-                this.name = this.isFloor ? "Flooring" : "Wallpaper";
-                this.price = 100;
+                this.isFloor.Value = item.isFloor.Value;
+                this.ParentSheetIndex = item.ParentSheetIndex;
+                this.name = this.isFloor.Value ? "Flooring" : "Wallpaper";
+                this.Price = 100;
             }
             public override bool canBePlacedHere(GameLocation l, Vector2 tile)
             {
@@ -30,7 +30,7 @@ namespace Entoarox.AdvancedLocationLoader.Locations
             }
             public Wallpaper Restore()
             {
-                return new Wallpaper(this.parentSheetIndex, this.isFloor);
+                return new Wallpaper(this.ParentSheetIndex, this.isFloor.Value);
             }
         }
         private static MethodInfo reset = typeof(GameLocation).GetMethod("resetForPlayerEntry", BindingFlags.Instance | BindingFlags.Public);
@@ -38,37 +38,37 @@ namespace Entoarox.AdvancedLocationLoader.Locations
         {
 
         }
-        public DecoratableLocation(xTile.Map map, string name) : base(map,name)
+        public DecoratableLocation(xTile.Map map, string name) : base(map.ToString(),name)
         {
 
         }
-        public override void resetForPlayerEntry()
+        public new void resetForPlayerEntry()
         {
             reset.Invoke(this, null);
             foreach (Furniture furniture in this.furniture)
                 furniture.resetOnPlayerEntry(this);
-            for (int c=0;c<Game1.player.items.Count;c++)
+            for (int c=0;c<Game1.player.Items.Count;c++)
             {
-                Item i = Game1.player.items[c];
-                if (Game1.player.items[c] is Wallpaper)
-                    Game1.player.items[c] = new FakeWallpaper((Wallpaper)Game1.player.items[c]);
+                Item i = Game1.player.Items[c];
+                if (Game1.player.Items[c] is Wallpaper)
+                    Game1.player.Items[c] = new FakeWallpaper((Wallpaper)Game1.player.Items[c]);
             }
         }
         public override void cleanupBeforePlayerExit()
         {
             base.cleanupBeforePlayerExit();
-            for (int c = 0; c < Game1.player.items.Count; c++)
+            for (int c = 0; c < Game1.player.Items.Count; c++)
             {
-                Item i = Game1.player.items[c];
-                if (Game1.player.items[c] is FakeWallpaper)
-                    Game1.player.items[c] = ((FakeWallpaper)Game1.player.items[c]).Restore();
+                Item i = Game1.player.Items[c];
+                if (Game1.player.Items[c] is FakeWallpaper)
+                    Game1.player.Items[c] = ((FakeWallpaper)Game1.player.Items[c]).Restore();
             }
         }
         public override void setFloor(int which, int whichRoom = -1, bool persist = false)
         {
             return;
         }
-        public override void setWallpaper(int which, int whichRoom = -1, bool persist = false)
+        public new void setWallpaper(int which, int whichRoom = -1, bool persist = false)
         {
             return;
         }

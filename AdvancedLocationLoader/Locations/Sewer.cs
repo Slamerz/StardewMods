@@ -1,4 +1,4 @@
-﻿using System.Xml;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Entoarox.AdvancedLocationLoader.Locations
@@ -10,11 +10,11 @@ namespace Entoarox.AdvancedLocationLoader.Locations
         {
 
         }
-        public Sewer(xTile.Map map, string name) : base(map,name)
+        public Sewer(xTile.Map map, string name) : base(map.ToString(),name)
         {
 
         }
-        public override void resetForPlayerEntry()
+        public new void resetForPlayerEntry()
         {
             base.resetForPlayerEntry();
             this.characters.Clear();

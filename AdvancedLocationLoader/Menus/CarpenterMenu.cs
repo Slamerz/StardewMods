@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
@@ -170,32 +170,32 @@ namespace Entoarox.AdvancedLocationLoader.Menus
                 if (!this.upgrading && !this.demolishing && !this.moving || this.freeze)
                     return;
                 foreach (Building building in ((BuildableGameLocation)Game1.getLocationFromName(this.TargetLocation)).buildings)
-                    building.color = Color.White;
+                    building.color.Set(Color.White);
                 Building building1 = ((BuildableGameLocation)Game1.getLocationFromName(this.TargetLocation)).getBuildingAt(new Vector2(((Game1.viewport.X + Game1.getOldMouseX()) / Game1.tileSize), ((Game1.viewport.Y + Game1.getOldMouseY()) / Game1.tileSize))) ?? ((BuildableGameLocation)Game1.getLocationFromName(this.TargetLocation)).getBuildingAt(new Vector2(((Game1.viewport.X + Game1.getOldMouseX()) / Game1.tileSize), ((Game1.viewport.Y + Game1.getOldMouseY() + Game1.tileSize * 2) / Game1.tileSize))) ?? ((BuildableGameLocation)Game1.getLocationFromName(this.TargetLocation)).getBuildingAt(new Vector2(((Game1.viewport.X + Game1.getOldMouseX()) / Game1.tileSize), ((Game1.viewport.Y + Game1.getOldMouseY() + Game1.tileSize * 3) / Game1.tileSize)));
                 if (this.upgrading)
                 {
                     if (building1 != null && this.CurrentBlueprint.nameOfBuildingToUpgrade != null && this.CurrentBlueprint.nameOfBuildingToUpgrade.Equals(building1.buildingType))
                     {
-                        building1.color = Color.Lime * 0.8f;
+                        building1.color.Set(Color.Lime * 0.8f);
                     }
                     else
                     {
                         if (building1 == null)
                             return;
-                        building1.color = Color.Red * 0.8f;
+                        building1.color.Set(Color.Red * 0.8f);
                     }
                 }
                 else if (this.demolishing)
                 {
                     if (building1 == null)
                         return;
-                    building1.color = Color.Red * 0.8f;
+                    building1.color.Set(Color.Red * 0.8f);
                 }
                 else
                 {
                     if (!this.moving || building1 == null)
                         return;
-                    building1.color = Color.Lime * 0.8f;
+                    building1.color.Set(Color.Lime * 0.8f);
                 }
             }
         }
@@ -216,7 +216,7 @@ namespace Entoarox.AdvancedLocationLoader.Menus
             if (Game1.globalFade || string.IsNullOrEmpty(this.TargetLocation))
                 return;
             if (Game1.options.doesInputListContain(Game1.options.menuButton, key) && readyToClose())
-                Game1.globalFadeToBlack(new Game1.afterFadeFunction(returnToCarpentryMenu), 0.02f);
+                Game1.globalFadeToBlack(new Game1.afterFadeFunction(this.returnToCarpentryMenu), 0.02f);
             else if (Game1.options.doesInputListContain(Game1.options.moveDownButton, key))
                 Game1.panScreen(0, 4);
             else if (Game1.options.doesInputListContain(Game1.options.moveRightButton, key))
@@ -273,7 +273,7 @@ namespace Entoarox.AdvancedLocationLoader.Menus
                         Game1.playSound("cancel");
                         return;
                     }
-                    Game1.globalFadeToBlack(new Game1.afterFadeFunction(returnToCarpentryMenu), 0.02f);
+                    Game1.globalFadeToBlack(new Game1.afterFadeFunction(this.returnToCarpentryMenu), 0.02f);
                     Game1.playSound("smallSelect");
                     return;
                 }
@@ -319,9 +319,9 @@ namespace Entoarox.AdvancedLocationLoader.Menus
             if (this.demolishing)
             {
                 Building buildingAt = ((BuildableGameLocation)Game1.getLocationFromName(this.TargetLocation)).getBuildingAt(new Vector2(((Game1.viewport.X + Game1.getOldMouseX()) / Game1.tileSize), ((Game1.viewport.Y + Game1.getOldMouseY()) / Game1.tileSize)));
-                if (buildingAt != null && (buildingAt.daysOfConstructionLeft > 0 || buildingAt.daysUntilUpgrade > 0))
+                if (buildingAt != null && (buildingAt.daysOfConstructionLeft.Value > 0 || buildingAt.daysUntilUpgrade.Value > 0))
                     Game1.addHUDMessage(new HUDMessage(Game1.content.LoadString("Strings\\UI:Carpenter_CantDemolish_DuringConstruction"), Color.Red, 3500f));
-                else if (buildingAt != null && buildingAt.indoors != null && (buildingAt.indoors is AnimalHouse && (buildingAt.indoors as AnimalHouse).animalsThatLiveHere.Count > 0))
+                else if (buildingAt != null && buildingAt.indoors.Value != null && (buildingAt.indoors.Value is AnimalHouse && (buildingAt.indoors.Value as AnimalHouse).animalsThatLiveHere.Count > 0))
                 {
                     Game1.addHUDMessage(new HUDMessage(Game1.content.LoadString("Strings\\UI:Carpenter_CantDemolish_AnimalsHere"), Color.Red, 3500f));
                 }
@@ -329,8 +329,8 @@ namespace Entoarox.AdvancedLocationLoader.Menus
                 {
                     if (buildingAt == null || !((BuildableGameLocation)Game1.getLocationFromName(this.TargetLocation)).destroyStructure(buildingAt))
                         return;
-                    int num1 = buildingAt.tileY;
-                    int num2 = buildingAt.tilesHigh;
+                    int num1 = buildingAt.tileY.Value;
+                    int num2 = buildingAt.tilesHigh.Value;
                     Game1.flashAlpha = 1f;
                     buildingAt.showDestroyedAnimation(Game1.getLocationFromName(this.TargetLocation));
                     Game1.playSound("explosion");
@@ -345,7 +345,7 @@ namespace Entoarox.AdvancedLocationLoader.Menus
                 if (buildingAt != null && this.CurrentBlueprint.name != null && buildingAt.buildingType.Equals(this.CurrentBlueprint.nameOfBuildingToUpgrade))
                 {
                     this.CurrentBlueprint.consumeResources();
-                    buildingAt.daysUntilUpgrade = 2;
+                    buildingAt.daysUntilUpgrade.Set(2);
                     buildingAt.showUpgradeAnimation(Game1.getLocationFromName(this.TargetLocation));
                     Game1.playSound("axe");
                     DelayedAction.fadeAfterDelay(this.returnToCarpentryMenuAfterSuccessfulBuild, 1500);
@@ -365,7 +365,7 @@ namespace Entoarox.AdvancedLocationLoader.Menus
                     this.buildingToMove = ((BuildableGameLocation)Game1.getLocationFromName(this.TargetLocation)).getBuildingAt(new Vector2(((Game1.viewport.X + Game1.getMouseX()) / Game1.tileSize), ((Game1.viewport.Y + Game1.getMouseY()) / Game1.tileSize)));
                     if (this.buildingToMove == null)
                         return;
-                    if (this.buildingToMove.daysOfConstructionLeft > 0)
+                    if (this.buildingToMove.daysOfConstructionLeft.Value > 0)
                     {
                         this.buildingToMove = null;
                     }
@@ -375,7 +375,7 @@ namespace Entoarox.AdvancedLocationLoader.Menus
                         Game1.playSound("axchop");
                     }
                 }
-                else if (((BuildableGameLocation)Game1.getLocationFromName(this.TargetLocation)).buildStructure(this.buildingToMove, new Vector2(((Game1.viewport.X + Game1.getMouseX()) / Game1.tileSize), (float)((Game1.viewport.Y + Game1.getMouseY()) / Game1.tileSize)), false, Game1.player))
+                else if (((BuildableGameLocation)Game1.getLocationFromName(this.TargetLocation)).buildStructure(this.buildingToMove, new Vector2(((Game1.viewport.X + Game1.getMouseX()) / Game1.tileSize), (float)((Game1.viewport.Y + Game1.getMouseY()) / Game1.tileSize)), Game1.player))
                 {
                     this.buildingToMove = null;
                     Game1.playSound("axchop");
@@ -388,7 +388,7 @@ namespace Entoarox.AdvancedLocationLoader.Menus
             else if (tryToBuild())
             {
                 this.CurrentBlueprint.consumeResources();
-                DelayedAction.fadeAfterDelay(new Game1.afterFadeFunction(returnToCarpentryMenuAfterSuccessfulBuild), 2000);
+                DelayedAction.fadeAfterDelay(new Game1.afterFadeFunction(this.returnToCarpentryMenuAfterSuccessfulBuild), 2000);
                 this.freeze = true;
             }
             else
@@ -397,7 +397,7 @@ namespace Entoarox.AdvancedLocationLoader.Menus
 
         public bool tryToBuild()
         {
-            return ((BuildableGameLocation)Game1.getLocationFromName(this.TargetLocation)).buildStructure(this.CurrentBlueprint, new Vector2(((Game1.viewport.X + Game1.getOldMouseX()) / Game1.tileSize), ((Game1.viewport.Y + Game1.getOldMouseY()) / Game1.tileSize)), false, Game1.player, this.magicalConstruction);
+            return ((BuildableGameLocation)Game1.getLocationFromName(this.TargetLocation)).buildStructure(this.CurrentBlueprint, new Vector2(((Game1.viewport.X + Game1.getOldMouseX()) / Game1.tileSize), ((Game1.viewport.Y + Game1.getOldMouseY()) / Game1.tileSize)),  Game1.player, false, this.magicalConstruction);
         }
 
         public void returnToCarpentryMenu()
@@ -424,7 +424,7 @@ namespace Entoarox.AdvancedLocationLoader.Menus
             Game1.currentLocation.cleanupBeforePlayerExit();
             Game1.currentLocation = Game1.getLocationFromName(this.magicalConstruction ? "WizardHouse" : "ScienceHouse");
             Game1.currentLocation.resetForPlayerEntry();
-            Game1.globalFadeToClear(new Game1.afterFadeFunction(robinConstructionMessage), 0.02f);
+            Game1.globalFadeToClear(new Game1.afterFadeFunction(this.robinConstructionMessage), 0.02f);
             Game1.displayHUD = true;
             Game1.viewportFreeze = false;
             Game1.viewport.Location = new Location(5 * Game1.tileSize, 24 * Game1.tileSize);
@@ -506,7 +506,7 @@ namespace Entoarox.AdvancedLocationLoader.Menus
                 {
                     location.Y += (Game1.tileSize + Game1.pixelZoom);
                     obj.drawInMenu(b, location, 1f);
-                    bool flag = !(obj is Object) || Game1.player.hasItemInInventory((obj as Object).parentSheetIndex, obj.Stack, 0);
+                    bool flag = !(obj is Object) || Game1.player.hasItemInInventory((obj as Object).ParentSheetIndex, obj.Stack, 0);
                     if (this.magicalConstruction)
                     {
                         Utility.drawTextWithShadow(b, obj.Name, Game1.dialogueFont, new Vector2(location.X + Game1.tileSize + (Game1.pixelZoom * 3), location.Y + (Game1.pixelZoom * 6)), Game1.textColor * 0.25f, 1f, -1f, -1, -1, this.magicalConstruction ? 0.0f : 0.25f, 3);
@@ -547,9 +547,9 @@ namespace Entoarox.AdvancedLocationLoader.Menus
                 else if (this.moving && this.buildingToMove != null)
                 {
                     Vector2 vector2 = new Vector2(((Game1.viewport.X + Game1.getOldMouseX()) / Game1.tileSize), ((Game1.viewport.Y + Game1.getOldMouseY()) / Game1.tileSize));
-                    for (int y = 0; y < this.buildingToMove.tilesHigh; ++y)
+                    for (int y = 0; y < this.buildingToMove.tilesHigh.Value; ++y)
                     {
-                        for (int x = 0; x < this.buildingToMove.tilesWide; ++x)
+                        for (int x = 0; x < this.buildingToMove.tilesWide.Value; ++x)
                         {
                             int structurePlacementTile = this.buildingToMove.getTileSheetIndexForStructurePlacementTile(x, y);
                             Vector2 tileLocation = new Vector2(vector2.X + x, vector2.Y + y);

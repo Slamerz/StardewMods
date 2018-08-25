@@ -60,7 +60,7 @@ namespace Entoarox.AdvancedLocationLoader
         }
         internal static void LocationEvents_CurrentLocationChanged(object s, EventArgs e)
         {
-            LocationEvents.CurrentLocationChanged -= LocationEvents_CurrentLocationChanged;
+            PlayerEvents.Warped -= LocationEvents_CurrentLocationChanged;
             ModEntry.UpdateConditionalEdits();
         }
     }
