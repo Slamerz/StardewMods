@@ -91,6 +91,7 @@
     <Compile Include="Events\ItemEvents.cs" />
     <Compile Include="Experimental\PathFinder.cs" />
     <Compile Include="Extensions\PointExtensions.cs" />
+    <Compile Include="Extensions\IListExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="GameLocationExtensions.cs" />
     <Compile Include="IAugmentedLocation.cs" />
@@ -202,7 +203,6 @@
   <ItemGroup>
     <None Include="About\ConditionDocumentation.md" />
     <None Include="manifest.json" />
-    <None Include="About\update.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
