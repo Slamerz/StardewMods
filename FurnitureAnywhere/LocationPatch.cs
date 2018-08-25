@@ -24,7 +24,7 @@ namespace Entoarox.FurnitureAnywhere
 
             foreach (Vector2 k in objects.Keys)
                 if (objects[k] is Furniture)
-                    if (objects[k].boundingBox.Intersects(position))
+                    if (objects[k].boundingBox.Value.Intersects(position))
                     {
                         Chest chest = new Chest(true)
                         {
