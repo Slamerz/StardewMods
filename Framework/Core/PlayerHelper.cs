@@ -36,13 +36,7 @@ namespace Entoarox.Framework.Core
         }
         public bool HasPet(bool vanillaOnly)
         {
-            List<Pet> pets = new List<Pet>();
-            List<NPC> npcs = new List<NPC>();
-            foreach (NPC npc in Utility.getAllCharacters())
-            {
-                npcs.Add(npc);
-            }
-            pets = npcs.Where(a => a is Pet).Cast<Pet>().ToList();
+            List<Pet> pets = this.GetAllPets();
             if (vanillaOnly)
                 return pets.Any(a => (Game1.player.catPerson ? a is Cat : a is Dog) && a.Manners == 0 && a.Age == 0);
             else

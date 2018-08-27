@@ -174,11 +174,11 @@ namespace Entoarox.Framework
             {
                 warps.Add(w);
             }
+            if (warps == null) return;
             if (!replace && warps.Exists(a => a.X == x && a.Y == y))
                 throw new ArgumentException("Index already set " + x.ToString() + ',' + y.ToString());
-            else if (warps != null)
-                foreach (var warp in warps.Where(a => a.X == x && a.Y == y))
-                    self.warps.Remove(warp);
+            foreach (var warp in warps.Where(a => a.X == x && a.Y == y))
+                self.warps.Remove(warp);
             self.warps.Add(new Warp(x, y, target, x, y, false));
         }
         public static void RemoveWarp(this GameLocation self, int x, int y)

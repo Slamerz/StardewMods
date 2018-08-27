@@ -72,6 +72,7 @@ namespace Entoarox.Framework.Core
                     .Add("farm_clear", "farm_clear | Removes ALL objects from your farm, this cannot be undone!", this.Commands)
 
                     .Add("player_warp", "player_warp <location> <x> <y> | Warps the player to the given position in the game.", this.Commands)
+                    .Add("world_locations", "world_location | Lists all currently added locations in the game.", this.Commands)
                 ;
             GameEvents.UpdateTick += this.GameEvents_FirstUpdateTick;
             SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
@@ -137,7 +138,8 @@ namespace Entoarox.Framework.Core
             }
             switch (command)
             {
-                /*case "world_bushreset":
+                /* TODO fix bush reset
+                 case "world_bushreset":
                     foreach (GameLocation loc in Game1.locations)
                     {
                         loc.largeTerrainFeatures = loc.largeTerrainFeatures.FindAll(a => !(a is Bush));
@@ -206,6 +208,11 @@ namespace Entoarox.Framework.Core
                 case "player_warp":
                     try
                     {
+                        if(Game1.getLocationFromName(args[0]) is null)
+                        {
+                            this.Monitor.Log("Could not find that location", LogLevel.Alert);
+                            break;
+                        }
                         int x = Convert.ToInt32(args[1]);
                         int y = Convert.ToInt32(args[2]);
                         Game1.warpFarmer(args[0], x, y, false);
@@ -214,6 +221,12 @@ namespace Entoarox.Framework.Core
                     catch (Exception err)
                     {
                         this.Monitor.Log("A error occured trying to warp: ", LogLevel.Error, err);
+                    }
+                    break;
+                case "world_locations":
+                    foreach (GameLocation location in Game1.locations)
+                    {
+                        this.Monitor.Log(location.Name, LogLevel.Alert);
                     }
                     break;
             }
@@ -249,7 +262,7 @@ namespace Entoarox.Framework.Core
                 return;
             if ((Game1.player.CurrentItem == null && this.prevItem != null) || (Game1.player.CurrentItem != null && !Game1.player.CurrentItem.Equals(this.prevItem)))
             {
-                MoreEvents.FireActiveItemChanged(new EventArgsActiveItemChanged(this.prevItem, Game1.player.CurrentItem));
+                ItemEvents.FireActiveItemChanged(new EventArgsActiveItemChanged(this.prevItem, Game1.player.CurrentItem));
                 this.prevItem = Game1.player.CurrentItem;
             }
             PlayerModifierHelper._UpdateModifiers();
