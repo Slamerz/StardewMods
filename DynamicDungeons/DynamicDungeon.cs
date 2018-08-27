@@ -36,7 +36,7 @@ namespace Entoarox.DynamicDungeons
         public List<ResourceClump> ResourceClumps = new List<ResourceClump>();
         public DynamicDungeon(double difficulty=0, int? seed = null)
         {
-            this.name = "DynamicDungeon";
+            this.name.Value = "DynamicDungeon";
             this._Seed = seed ?? _Random.Next();
             this.Difficulty = difficulty;
             var builder = new DungeonBuilder(difficulty, 1);
@@ -124,7 +124,7 @@ namespace Entoarox.DynamicDungeons
             Game1.spriteBatch.Draw(Game1.staminaRect, new Rectangle(p.X + 20, p.Y + 21, 1, 1), Color.Red * 0.66f);
             Game1.spriteBatch.Draw(Game1.staminaRect, new Rectangle(p.X + 20, p.Y + 20, 1, 1), Color.Red * 0.99f);
         }
-        public override void resetForPlayerEntry()
+        public new void resetForPlayerEntry()
         {
             this._Time = Game1.timeOfDay;
             base.resetForPlayerEntry();
@@ -139,7 +139,7 @@ namespace Entoarox.DynamicDungeons
         {
             Game1.timeOfDay = this._Time;
             foreach (ResourceClump current in this.ResourceClumps)
-                current.tickUpdate(time, current.tile);
+                current.tickUpdate(time, current.tile.Value, this);
             base.UpdateWhenCurrentLocation(time);
         }
         public override StardewValley.Object getFish(float millisecondsAfterNibble, int bait, int waterDepth, SFarmer who, double baitPotency)
@@ -160,13 +160,13 @@ namespace Entoarox.DynamicDungeons
         public override void draw(SpriteBatch b)
         {
             foreach (ResourceClump current in this.ResourceClumps)
-                current.draw(b, current.tile);
+                current.draw(b, current.tile.Value);
             base.draw(b);
         }
         public override bool isCollidingPosition(XnaRectangle position, xTileRectangle viewport, bool isFarmer, int damagesFarmer, bool glider, Character character)
         {
             foreach (ResourceClump current in this.ResourceClumps)
-                if (!glider && current.getBoundingBox(current.tile).Intersects(position))
+                if (!glider && current.getBoundingBox(current.tile.Value).Intersects(position))
                     return true;
             return base.isCollidingPosition(position, viewport, isFarmer, damagesFarmer, glider, character);
         }

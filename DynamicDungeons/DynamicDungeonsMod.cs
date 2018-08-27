@@ -11,6 +11,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 
 using StardewValley;
+using xTile;
 using SFarmer = StardewValley.Farmer;
 
 using xTile.Tiles;
@@ -79,10 +80,14 @@ namespace Entoarox.DynamicDungeons
             }
             else if (action.Equals("DDDoor"))
             {
-                if (Game1.player.hasSkullKey)
+                //TODO inverted for testing
+                if (!Game1.player.hasSkullKey)
                 {
-                    var warp = Game1.getLocationFromName("DynamicDungeonEntrance").warps[0];
-                    Game1.warpFarmer("DynamicDungeonEntrance", warp.X, warp.Y - 1, false);
+                    //var warp = Game1.getLocationFromName("DynamicDungeonEntrance").warps[0];
+                    //Game1.warpFarmer("DynamicDungeonEntrance", warp.X, warp.Y - 1, false);
+                    if(Game1.getLocationFromName("DynamicDungeonEntrance") != null)
+                        Game1.warpFarmer("DynamicDungeonEntrance", 1, 1,false);
+                    else this.Monitor.Log("Couldn't Find the dungeon");
 
                 }
                 else
@@ -122,53 +127,56 @@ namespace Entoarox.DynamicDungeons
         }
         private void GameEvents_UpdateTick(object s, EventArgs e)
         {
-            if (Context.IsWorldReady)
-            {
-                GameEvents.UpdateTick -= this.GameEvents_UpdateTick;
-                InputEvents.ButtonReleased += this.InputEvents_ButtonReleased;
-                LocationEvents.CurrentLocationChanged += this.LocationEvents_CurrentLocationChanged;
-                var loc = Game1.getLocationFromName("WizardHouse");
-                var sheet = new TileSheet("Custom",loc.map, this.Helper.Content.GetActualAssetKey("door.png"), new xTile.Dimensions.Size(4, 7), new xTile.Dimensions.Size(16, 16));
-                loc.map.AddTileSheet(sheet);
-                /*
+            if (!Context.IsWorldReady) return;
+            GameEvents.UpdateTick -= this.GameEvents_UpdateTick;
+            InputEvents.ButtonReleased += this.InputEvents_ButtonReleased;
+            PlayerEvents.Warped += this.PlayerEvents_Warped;
+            var loc = Game1.getLocationFromName("WizardHouse");
+            var sheet = new TileSheet("Custom",loc.map, this.Helper.Content.GetActualAssetKey("door.png"), new xTile.Dimensions.Size(4, 7), new xTile.Dimensions.Size(16, 16));
+            loc.map.AddTileSheet(sheet);
+            /*
                 loc.setMapTileIndex(5, 13, 112, "Back");
                 (5, 13, "Buildings", 1, "Custom").ApplyTo(loc.map);
                 (5, 12, "Front", 0, "Custom").ApplyTo(loc.map);
                 */
-                (4, 11, "Front", 0, "Custom").ApplyTo(loc.map);
-                (5, 11, "Front", 1, "Custom").ApplyTo(loc.map);
-                (6, 11, "Front", 2, "Custom").ApplyTo(loc.map);
+            (4, 11, "Front", 0, "Custom").ApplyTo(loc.map);
+            (5, 11, "Front", 1, "Custom").ApplyTo(loc.map);
+            (6, 11, "Front", 2, "Custom").ApplyTo(loc.map);
 
-                (4, 12, "Buildings", 4, "Custom").ApplyTo(loc.map);
-                (6, 12, "Buildings", 6, "Custom").ApplyTo(loc.map);
+            (4, 12, "Buildings", 4, "Custom").ApplyTo(loc.map);
+            (6, 12, "Buildings", 6, "Custom").ApplyTo(loc.map);
 
-                (4, 13, "Buildings", 8, "Custom").ApplyTo(loc.map);
-                (6, 13, "Buildings", 10, "Custom").ApplyTo(loc.map);
+            (4, 13, "Buildings", 8, "Custom").ApplyTo(loc.map);
+            (6, 13, "Buildings", 10, "Custom").ApplyTo(loc.map);
 
-                (5, 12, "Buildings", new[] { 12, 13, 14, 15, 20, 21, 22, 23 }, "Custom", 250).ApplyTo(loc.map);
-                (5, 13, "Buildings", new[] { 16, 17, 18, 19, 24, 25, 26, 27 }, "Custom", 250).ApplyTo(loc.map);
+            (5, 12, "Buildings", new[] { 12, 13, 14, 15, 20, 21, 22, 23 }, "Custom", 250).ApplyTo(loc.map);
+            (5, 13, "Buildings", new[] { 16, 17, 18, 19, 24, 25, 26, 27 }, "Custom", 250).ApplyTo(loc.map);
 
-                (5, 13, "Buildings", "Action", "DDDoor").ApplyTo(loc.map);
-                if (Game1.getLocationFromName("DynamicDungeonEntrance") == null)
-                    Game1.locations.Add(new GameLocation(this.Helper.Content.Load<xTile.Map>("DynamicDungeonsEntrance.tbin"), "DynamicDungeonEntrance"));
-            }
+            (5, 13, "Buildings", "Action", "DDDoor").ApplyTo(loc.map);
+            if (Game1.getLocationFromName("DynamicDungeonEntrance") != null) return;
+            GameLocation l = new GameLocation
+            {
+                //TODO Still not correctly adding the location to the locations list. Looking into l = new GameLocation(string, string)
+                map = this.Helper.Content.Load<Map>("DynamicDungeonsEntrance.tbin"),
+            };
+            Game1.locations.Add(l);
         }
-        private void LocationEvents_CurrentLocationChanged(object s, EventArgsCurrentLocationChanged e)
+        private void PlayerEvents_Warped(object s, EventArgsPlayerWarped e)
         {
-            if(e.PriorLocation!=null && (e.PriorLocation.name=="DynamicDungeonEntrance" || e.PriorLocation.name == "WizardHouse"))
+            if(e.PriorLocation!=null && (e.PriorLocation.Name=="DynamicDungeonEntrance" || e.PriorLocation.Name == "WizardHouse"))
             {
                 ControlEvents.ControllerButtonPressed -= this.ControlEvents_ControllerButtonPressed;
                 ControlEvents.ControllerButtonReleased -= this.ControlEvents_ControllerButtonReleased;
                 ControlEvents.MouseChanged -= this.ControlEvents_MouseChanged;
-                if (e.PriorLocation.name == "DynamicDungeonEntrance")
+                if (e.PriorLocation.Name == "DynamicDungeonEntrance")
                     GraphicsEvents.OnPreRenderHudEvent -= this.GraphicsEvents_OnPreRenderHudEvent;
             }
-            if(e.NewLocation.name=="DynamicDungeonEntrance" || e.NewLocation.name == "WizardHouse")
+            if(e.NewLocation.Name=="DynamicDungeonEntrance" || e.NewLocation.Name == "WizardHouse")
             {
                 ControlEvents.ControllerButtonPressed += this.ControlEvents_ControllerButtonPressed;
                 ControlEvents.ControllerButtonReleased += this.ControlEvents_ControllerButtonReleased;
                 ControlEvents.MouseChanged += this.ControlEvents_MouseChanged;
-                if (e.NewLocation.name == "DynamicDungeonEntrance")
+                if (e.NewLocation.Name == "DynamicDungeonEntrance")
                     GraphicsEvents.OnPreRenderHudEvent += this.GraphicsEvents_OnPreRenderHudEvent;
             }
         }
