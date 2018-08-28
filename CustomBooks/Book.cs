@@ -30,7 +30,7 @@ namespace Entoarox.CustomBooks
                 Icon = CustomBooksMod.SHelper.Content.Load<Texture2D>("icon.png");
             this.Id = id;
             this.name = CustomBooksMod.Shelf.Books[id].Name;
-            this.bigCraftable.Value = true;
+            this.bigCraftable.Set(true);
         }
 
         public void Activate()
