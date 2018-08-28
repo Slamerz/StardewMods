@@ -180,7 +180,7 @@ namespace Entoarox.MorePetsAndAnimals
                 else if (animal.showDifferentTextureWhenReadyForHarvest.Value && animal.currentProduce.Value <= 0)
                     str = "Sheared" + animal.type.Value;
                 if (animal.meatIndex.Value < 999)
-                    animal.meatIndex.Value = Indexes[str][random.Next(0, Indexes[str].Count)] + 999;
+                    animal.meatIndex.Set(Indexes[str][random.Next(0, Indexes[str].Count)] + 999);
                 else if (animal.meatIndex.Value > 999)
                 {
                     try
