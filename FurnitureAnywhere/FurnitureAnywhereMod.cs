@@ -21,8 +21,8 @@ namespace Entoarox.FurnitureAnywhere
     {
         public override void Entry(IModHelper helper)
         {
-            //var harmony = HarmonyInstance.Create("Entoarox.FurnitureAnywhere");
-            //harmony.PatchAll(Assembly.GetExecutingAssembly());
+            var harmony = HarmonyInstance.Create("Entoarox.FurnitureAnywhere");
+            harmony.PatchAll(Assembly.GetExecutingAssembly());
             ItemEvents.ActiveItemChanged += this.MoreEvents_ActiveItemChanged;
             PlayerEvents.Warped += this.TriggerItemChangedEvent;
             MenuEvents.MenuChanged += this.TriggerItemChangedEvent;

@@ -58,9 +58,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\VersionChecker\FurnitureAnywhere.json">
-      <Link>FurnitureAnywhere.json</Link>
-    </None>
     <None Include="manifest.json" />
     <None Include="packages.config" />
   </ItemGroup>

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Objects;
@@ -13,10 +14,10 @@ namespace Entoarox.FurnitureAnywhere
         }
         public AnywhereFurniture(Furniture item) : base(item.ParentSheetIndex, item.TileLocation)
         {
-            this.defaultBoundingBox.Value = item.defaultBoundingBox.Value;
-            this.boundingBox.Value = item.boundingBox.Value;
-            this.currentRotation.Value = item.currentRotation.Value;
-            this.rotations.Value = item.rotations.Value;
+            this.defaultBoundingBox.Set(item.defaultBoundingBox.Value);
+            this.boundingBox.Set(item.boundingBox.Value);
+            this.currentRotation.Set(item.currentRotation.Value);
+            this.rotations.Set(item.rotations.Value);
             this.rotate();
             this.rotate();
             this.rotate();
@@ -102,7 +103,7 @@ namespace Entoarox.FurnitureAnywhere
                         return false;
                 }
             }
-            this.boundingBox.Value = new Rectangle(x / Game1.tileSize * Game1.tileSize, y / Game1.tileSize * Game1.tileSize, this.boundingBox.Width, this.boundingBox.Height);
+            this.boundingBox.Set(new Rectangle(x / Game1.tileSize * Game1.tileSize, y / Game1.tileSize * Game1.tileSize, this.boundingBox.Width, this.boundingBox.Height));
             foreach (Character character in location.getFarmers())
             {
                 if (character.GetBoundingBox().Intersects(this.boundingBox.Value))
