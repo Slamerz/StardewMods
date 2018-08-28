@@ -36,7 +36,7 @@ namespace Entoarox.DynamicDungeons
         public List<ResourceClump> ResourceClumps = new List<ResourceClump>();
         public DynamicDungeon(double difficulty=0, int? seed = null)
         {
-            this.name.Value = "DynamicDungeon";
+            this.name.Set("DynamicDungeon");
             this._Seed = seed ?? _Random.Next();
             this.Difficulty = difficulty;
             var builder = new DungeonBuilder(difficulty, 1);

@@ -157,6 +157,7 @@ namespace Entoarox.DynamicDungeons
             GameLocation l = new GameLocation
             {
                 //TODO Still not correctly adding the location to the locations list. Looking into l = new GameLocation(string, string)
+                name = {"DynamicDungeonEntrance"},
                 map = this.Helper.Content.Load<Map>("DynamicDungeonsEntrance.tbin"),
             };
             Game1.locations.Add(l);
