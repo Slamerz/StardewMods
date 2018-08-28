@@ -16,11 +16,9 @@ namespace Entoarox.FasterPaths
     {
         private ConfigFP cfg;
         private PlayerModifier[] Modifiers;
-        private Version Version = new Version(1, 3, 1);
         private PlayerModifier CurrentBoost;
         public override void Entry(IModHelper helper)
         {
-            //this.Helper.RequestUpdateCheck("https://raw.githubusercontent.com/Entoarox/StardewMods/master/FasterPaths/update.json");
             this.cfg = this.Helper.ReadConfig<ConfigFP>();
             GameEvents.UpdateTick += this.UpdateTick;
             helper.ConsoleCommands.Add("fp_info", "Gives info about the path you are currently standing on", this.CommandInfo);
