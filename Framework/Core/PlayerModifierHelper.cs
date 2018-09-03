@@ -139,6 +139,7 @@ namespace Entoarox.Framework.Core
                 {
                     Game1.currentLightSources.Remove(lightSource);
                     lightSource = new LightSource(1, new Vector2(Game1.player.position.X + (Game1.tileSize / 3), Game1.player.position.Y), _Compound.GlowDistance);
+                    Game1.currentLightSources.Add(lightSource);
                 }
         }
         public int Count
