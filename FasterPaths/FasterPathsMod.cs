@@ -48,16 +48,16 @@ namespace Entoarox.FasterPaths
                     return;
                 if (this.CurrentBoost != null)
                 {
-                    this.Monitor.Log("Replacing path boost: " + this.CurrentBoost.WalkSpeedModifier,LogLevel.Trace);
+                    //this.Monitor.Log("Replacing path boost: " + this.CurrentBoost.WalkSpeedModifier,LogLevel.Trace);
                     this.Helper.Player().Modifiers.Remove(this.CurrentBoost);
                 }
-                this.Monitor.Log("Adding path boost: "+NewBoost.WalkSpeedModifier,LogLevel.Trace);
+                //this.Monitor.Log("Adding path boost: "+NewBoost.WalkSpeedModifier,LogLevel.Trace);
                 this.Helper.Player().Modifiers.Add(NewBoost);
                 this.CurrentBoost = NewBoost;
             }
             else if (this.CurrentBoost != null)
             {
-                this.Monitor.Log("Removing path boost: " + this.CurrentBoost.WalkSpeedModifier,LogLevel.Trace);
+                //this.Monitor.Log("Removing path boost: " + this.CurrentBoost.WalkSpeedModifier,LogLevel.Trace);
                 this.Helper.Player().Modifiers.Remove(this.CurrentBoost);
                 this.CurrentBoost = null;
             }
