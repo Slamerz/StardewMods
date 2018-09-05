@@ -1,7 +1,7 @@
 {
   "Name": "Xnb Loader",
   "Author": "Entoarox",
-  "Version": "2.2.1-beta",
+  "Version": "2.2.2-unofficial.1-slamerz",
   "Description": "Safely load custom xnb files without touching your Content directory!",
   "UniqueID": "Entoarox.XnbLoader",
   "EntryDll": "XnbLoader.dll",
